@@ -13,7 +13,7 @@ fun main() {
     val prevTransfersInMonth = 70_000
     val amount = 6_000
 
-    if (checkLimitss(amount, type, prevTransfersInMonth))
+    if (checkLimits(amount, type, prevTransfersInMonth))
         println("При переводе $amount руб. комиссия составит ${calcCommission(amount, type, prevTransfersInMonth)} руб.")
 }
 
