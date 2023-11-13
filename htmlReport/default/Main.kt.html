@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">test.exec</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Main.kt</span></div><h1>Main.kt</h1><pre class="source lang-java linenums">const val MAX_LIMIT_IN_MONTH_CARDS = 600_000
+const val MAX_LIMIT_IN_DAY_CARDS = 150_000
+const val MAX_LIMIT_IN_MONTH_VKPAY = 40_000
+const val MAX_LIMIT_IN_DAY_VKPAY = 15_000
+const val LIMIT_IN_MONTH_WITHOUT_COMMISSION = 75_000
+const val COMMISSION_PERCENT_VISA_MIR = 0.75
+const val COMMISSION_PERCENT_MASTERCARD_MAESTRO = 0.6
+const val MINIMAL_COMMISSION_VISA_MIR = 35
+const val ADDITIONAL_COMMISSION_MASTERCARD_MAESTRO = 20
+
+fun main() {
+<span class="nc" id="L12">    val type = &quot;Mastercard&quot;</span>
+<span class="nc" id="L13">    val prevTransfersInMonth = 70_000</span>
+<span class="nc" id="L14">    val amount = 6_000</span>
+
+<span class="nc bnc" id="L16" title="All 2 branches missed.">    if (checkLimits(amount, type, prevTransfersInMonth))</span>
+<span class="nc" id="L17">        println(&quot;При переводе $amount руб. комиссия составит ${calcCommission(amount, type, prevTransfersInMonth)} руб.&quot;)</span>
+<span class="nc" id="L18">}</span>
+
+<span class="nc" id="L20">fun calcCommission(amount: Int, type: String = &quot;VK Pay&quot;, prevTransfersInMonth: Int = 0, prevTransfersInDay: Int = 0): Int {</span>
+<span class="fc bfc" id="L21" title="All 4 branches covered.">    if (type == &quot;Mastercard&quot; || type == &quot;Maestro&quot;)</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        return if ((prevTransfersInMonth+amount) &gt; LIMIT_IN_MONTH_WITHOUT_COMMISSION) (amount * COMMISSION_PERCENT_MASTERCARD_MAESTRO / 100 + ADDITIONAL_COMMISSION_MASTERCARD_MAESTRO).toInt() else 0</span>
+<span class="fc bfc" id="L23" title="All 4 branches covered.">    if (type == &quot;Visa&quot; || type == &quot;Мир&quot;) {</span>
+<span class="fc" id="L24">            val commissionTotal = amount * COMMISSION_PERCENT_VISA_MIR / 100</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            return if (commissionTotal &lt; MINIMAL_COMMISSION_VISA_MIR) MINIMAL_COMMISSION_VISA_MIR else (commissionTotal).toInt()</span>
+        }
+<span class="fc" id="L27">    return 0</span>
+}
+
+<span class="nc" id="L30">fun checkLimits(amount: Int, type: String = &quot;VK Pay&quot;, prevTransfersInMonth: Int = 0, prevTransfersInDay: Int = 0): Boolean {</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">    if (type == &quot;VK Pay&quot;)</span>
+<span class="nc" id="L32">        when {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            (prevTransfersInMonth+amount) &gt; MAX_LIMIT_IN_MONTH_VKPAY -&gt; {</span>
+<span class="nc" id="L34">                println(&quot;Вы превышаете лимит $MAX_LIMIT_IN_MONTH_VKPAY в месяц на ${(prevTransfersInMonth+amount)-MAX_LIMIT_IN_MONTH_VKPAY}&quot;)</span>
+<span class="nc" id="L35">                return false</span>
+            }
+<span class="nc bnc" id="L37" title="All 2 branches missed.">            (prevTransfersInDay+amount) &gt; MAX_LIMIT_IN_DAY_VKPAY -&gt; {</span>
+<span class="nc" id="L38">                println(&quot;Вы превышаете лимит $MAX_LIMIT_IN_DAY_VKPAY в сутки на ${(prevTransfersInDay+amount)-MAX_LIMIT_IN_DAY_VKPAY}&quot;)</span>
+<span class="nc" id="L39">                return false</span>
+            }
+        }
+    else
+<span class="nc" id="L43">        when {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            (prevTransfersInMonth+amount) &gt; MAX_LIMIT_IN_MONTH_CARDS -&gt; {</span>
+<span class="nc" id="L45">                println(&quot;Вы превышаете лимит $MAX_LIMIT_IN_MONTH_CARDS в месяц на ${(prevTransfersInMonth+amount)-MAX_LIMIT_IN_MONTH_CARDS}&quot;)</span>
+<span class="nc" id="L46">                return false</span>
+            }
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            (prevTransfersInDay+amount) &gt; MAX_LIMIT_IN_DAY_CARDS -&gt; {</span>
+<span class="nc" id="L49">                println(&quot;Вы превышаете лимит $MAX_LIMIT_IN_DAY_CARDS в сутки на ${(prevTransfersInDay+amount)-MAX_LIMIT_IN_DAY_CARDS}&quot;)</span>
+<span class="nc" id="L50">                return false</span>
+            }
+        }
+<span class="nc" id="L53">    return true</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
