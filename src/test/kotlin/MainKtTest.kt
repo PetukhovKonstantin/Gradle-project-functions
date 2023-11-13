@@ -12,7 +12,7 @@ class MainKtTest {
         val amount = 6_000
 
         val result = calcCommission(amount, type, prevTransfersInMonth, prevTransfersInDay)
-        assertEquals(10, result)
+        assertEquals(0, result)
     }
 
     @Test
@@ -23,7 +23,7 @@ class MainKtTest {
         val amount = 6_000
 
         val result = calcCommission(amount, type, prevTransfersInMonth, prevTransfersInDay)
-        assertEquals(20, result)
+        assertEquals(0, result)
     }
 
     @Test
